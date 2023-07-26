@@ -17,8 +17,6 @@ export default function FetchData() {
     dispatch(setUser());
   }, []);
 
-  console.log(usersPagination);
-
   return (
     <div className="mb-20">
       <div className="grid grid-cols-3 gap-10 p-4 place-items-center">

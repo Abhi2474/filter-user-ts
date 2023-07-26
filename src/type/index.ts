@@ -10,6 +10,7 @@ export type DataProps = {
 }
 
 export type ZodPagination = {
+	filteredArray: DataProps[];
 	data: DataProps[];
 	meta: {
 		currentPage: number;

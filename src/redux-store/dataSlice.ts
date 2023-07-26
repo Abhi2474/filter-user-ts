@@ -1,14 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ZodPagination } from '../type';
 import user_data from '../assets/user_data.json'
 
 const initialState: ZodPagination = {
-	data: user_data,
+	filteredArray: user_data,
+	data: [],
 	meta: {
 		currentPage: 1,
-		perPage: 0,
+		perPage: 30,
 		totalPages: 0,
-		totalItems: user_data.length,
+		totalItems: 0,
 	}
 }
 
@@ -18,31 +19,48 @@ export const userSlice = createSlice({
 	reducers: {
 		setUser: (state) => {
 			let { currentPage } = state.meta
-			state.meta.perPage = 30
-			state.data = user_data.slice(currentPage * state.meta.perPage - state.meta.perPage, currentPage * state.meta.perPage)
+			state.meta.totalItems = state.filteredArray.length
+			state.data = state.filteredArray.slice(currentPage * state.meta.perPage - state.meta.perPage, currentPage * state.meta.perPage)
 			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
-		},
-		increaseCurrentPage: (state) => {
-			state.meta.currentPage++
-			state.data = user_data.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
-		},
-		decreaseCurrentPage: (state) => {
-			state.meta.currentPage--
-			state.data = user_data.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 		},
 		resetUser: (state) => {
 			state.meta.currentPage = 1
-			state.data = user_data.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+			state.filteredArray = user_data
+			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 		},
-		getUniqueDomain: (state) => {
-			const filteredArray = user_data.filter((data) => {
-				return data.domain === 'IT'
+		increaseCurrentPage: (state) => {
+			state.meta.currentPage++
+			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+		},
+		decreaseCurrentPage: (state) => {
+			state.meta.currentPage--
+			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+		},
+		getUniqueDomain: (state, action: PayloadAction<string>) => {
+
+			state.filteredArray = user_data.filter((data) => {
+				return data.domain === action.payload
 			})
-			state.data = filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
-		}
+			state.meta.totalItems = state.filteredArray.length
+			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
+
+
+			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+		},
+		getUniqueGender: (state, action: PayloadAction<string>) => {
+
+			state.filteredArray = user_data.filter((data) => {
+				return data.gender === action.payload
+			})
+			state.meta.totalItems = state.filteredArray.length
+			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
+
+
+			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+		},
 	}
 })
 
-export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser, getUniqueDomain } = userSlice.actions
+export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser, getUniqueDomain, getUniqueGender } = userSlice.actions
 
 export default userSlice.reducer

@@ -25,7 +25,7 @@ export default function TableData() {
         <caption className="caption-top my-4">
           Table: Users and their details.
         </caption>
-        <thead className="bg-gray-200 uppercase">
+        <thead className="bg-gray-400 uppercase">
           <tr>
             <th>id</th>
             <th>avatar</th>
@@ -36,8 +36,8 @@ export default function TableData() {
           </tr>
         </thead>
         <tbody>
-          {usersPagination?.data.map((user) => {
-            return <FetchTableData key={user.id} user={user} />;
+          {usersPagination?.data.map((user, id) => {
+            return <FetchTableData key={user.id} user={user} id={id} />;
           })}
         </tbody>
       </table>
@@ -61,9 +61,9 @@ export default function TableData() {
   );
 }
 
-const FetchTableData = ({ user }: { user: DataProps }) => {
+const FetchTableData = ({ user, id }: { user: DataProps; id: number }) => {
   return (
-    <tr className={`${user.id % 2 === 0 ? "bg-gray-100" : "bg-white"} `}>
+    <tr className={`${id % 2 === 0 ? "bg-gray-200" : "bg-white"} `}>
       <td>{user.id}</td>
       <td>
         <img
