@@ -1,17 +1,13 @@
-import { z } from "zod";
-
-export const ZodDataObject = z.object({
-	id: z.number(),
-	email: z.string().email(),
-	first_name: z.string(),
-	last_name: z.string(),
-	domain: z.string(),
-	avatar: z.string(),
-	gender: z.string(),
-	available: z.boolean(),
-});
-export type DataProps = z.infer<typeof ZodDataObject>;
-export const ZodDataArray = z.array(ZodDataObject);
+export type DataProps = {
+	id: number
+	email: string
+	first_name: string
+	last_name: string
+	domain: string
+	avatar: string
+	gender: string
+	available: boolean
+}
 
 export type ZodPagination = {
 	data: DataProps[];

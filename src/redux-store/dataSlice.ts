@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 import { ZodPagination } from '../type';
 import user_data from '../assets/user_data.json'
 
@@ -19,9 +18,9 @@ export const userSlice = createSlice({
 	reducers: {
 		setUser: (state) => {
 			let { currentPage } = state.meta
-			state.meta.perPage = 20
+			state.meta.perPage = 30
 			state.data = user_data.slice(currentPage * state.meta.perPage - state.meta.perPage, currentPage * state.meta.perPage)
-			state.meta.totalPages = state.meta.totalItems / state.meta.perPage
+			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
 		},
 		increaseCurrentPage: (state) => {
 			state.meta.currentPage++
