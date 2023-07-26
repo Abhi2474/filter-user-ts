@@ -29,10 +29,14 @@ export const userSlice = createSlice({
 		decreaseCurrentPage: (state) => {
 			state.meta.currentPage--
 			state.data = user_data.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+		},
+		resetUser: (state) => {
+			state.meta.currentPage = 1
+			state.data = user_data.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 		}
 	}
 })
 
-export const { increaseCurrentPage, setUser, decreaseCurrentPage } = userSlice.actions
+export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser } = userSlice.actions
 
 export default userSlice.reducer
