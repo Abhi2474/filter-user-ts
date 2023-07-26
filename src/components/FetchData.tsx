@@ -29,7 +29,7 @@ export default function FetchData() {
       <div className="flex justify-between container mx-auto px-10 my-5">
         <Button
           isDisable={usersPagination?.meta.currentPage <= 1}
-          isNext={false}
+          onClick={() => dispatch(decreaseCurrentPage())}
         >
           Previous
         </Button>
@@ -37,7 +37,7 @@ export default function FetchData() {
           isDisable={
             usersPagination?.meta.currentPage > usersPagination.meta.totalPages
           }
-          isNext={true}
+          onClick={() => dispatch(increaseCurrentPage())}
         >
           Next
         </Button>

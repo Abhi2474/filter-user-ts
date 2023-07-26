@@ -33,10 +33,16 @@ export const userSlice = createSlice({
 		resetUser: (state) => {
 			state.meta.currentPage = 1
 			state.data = user_data.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
+		},
+		getUniqueDomain: (state) => {
+			const filteredArray = user_data.filter((data) => {
+				return data.domain === 'IT'
+			})
+			state.data = filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 		}
 	}
 })
 
-export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser } = userSlice.actions
+export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser, getUniqueDomain } = userSlice.actions
 
 export default userSlice.reducer

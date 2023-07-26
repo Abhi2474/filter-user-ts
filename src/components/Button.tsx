@@ -1,26 +1,16 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import {
-  decreaseCurrentPage,
-  increaseCurrentPage,
-} from "../redux-store/dataSlice";
 
 type ButtonProps = {
-  children: React.ReactNode;
-  isDisable: boolean;
-  isNext: boolean;
+  children?: React.ReactNode;
+  isDisable?: boolean;
+  onClick?: () => { payload: undefined; type: string };
 };
 
-export default function Button({ children, isDisable, isNext }: ButtonProps) {
-  const dispatch = useDispatch();
+export default function Button({ children, isDisable, onClick }: ButtonProps) {
   return (
     <button
       disabled={isDisable}
-      onClick={() =>
-        isNext
-          ? dispatch(increaseCurrentPage())
-          : dispatch(decreaseCurrentPage())
-      }
+      onClick={onClick}
       className={`py-2 px-4 font-bold rounded-sm text-white ${
         isDisable
           ? "cursor-not-allowed bg-gray-500"

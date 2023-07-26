@@ -3,13 +3,18 @@ import FetchData from "./components/FetchData";
 import TableData from "./pages/TableData";
 import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import FilterUi from "./components/FilterUi";
+import Button from "./components/Button";
+import { useDispatch } from "react-redux";
+import { getUniqueDomain } from "./redux-store/dataSlice";
 
 function App() {
   const [isToggle, setIsToggle] = useState(false);
+  const dispatch = useDispatch();
   return (
     <>
       <h1>Hello Typescript</h1>
       <FilterUi />
+      <Button onClick={() => dispatch(getUniqueDomain())}>Filter Domain</Button>
       {isToggle ? (
         <>
           <span className="flex items-center justify-between w-fit gap-4">

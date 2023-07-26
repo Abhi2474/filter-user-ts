@@ -1,9 +1,14 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux-store/store";
 import { DataProps } from "../type";
 import Button from "../components/Button";
-import { resetUser, setUser } from "../redux-store/dataSlice";
+import {
+  decreaseCurrentPage,
+  increaseCurrentPage,
+  resetUser,
+  setUser,
+} from "../redux-store/dataSlice";
 
 export default function TableData() {
   const usersPagination = useSelector((state: RootState) => state.users);
@@ -39,7 +44,7 @@ export default function TableData() {
       <div className="flex justify-between container mx-auto px-10 my-5">
         <Button
           isDisable={usersPagination?.meta.currentPage <= 1}
-          isNext={false}
+          onClick={() => dispatch(decreaseCurrentPage())}
         >
           Previous
         </Button>
@@ -47,7 +52,7 @@ export default function TableData() {
           isDisable={
             usersPagination?.meta.currentPage > usersPagination.meta.totalPages
           }
-          isNext={true}
+          onClick={() => dispatch(increaseCurrentPage())}
         >
           Next
         </Button>
