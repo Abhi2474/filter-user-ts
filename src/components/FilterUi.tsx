@@ -1,16 +1,28 @@
 import { ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
-import { getUniqueDomain, getUniqueGender } from "../redux-store/dataSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAvailableUser,
+  getUniqueDomain,
+  getUniqueGender,
+  isAvailable,
+  setDomain,
+  setGender,
+} from "../redux-store/dataSlice";
+import { RootState } from "../redux-store/store";
 
 export default function FilterUi() {
+  const userPagination = useSelector(
+    (state: RootState) => state.users.filterBy
+  );
   const dispatch = useDispatch();
 
   return (
     <div>
       <select
         name="domain changer"
-        id=""
+        value={userPagination.domain}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+          dispatch(setDomain(e.target.value));
           dispatch(getUniqueDomain(e.target.value));
         }}
       >
@@ -25,8 +37,10 @@ export default function FilterUi() {
       </select>
       <select
         name="gender changer"
-        id=""
+        value={userPagination.gender}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+          console.log(e.target.value);
+          dispatch(setGender(e.target.value));
           dispatch(getUniqueGender(e.target.value));
         }}
       >
@@ -40,6 +54,19 @@ export default function FilterUi() {
         <option value="Genderfluid">Genderfluid</option>
         <option value="Genderqueer">Genderqueer</option>
       </select>
+
+      <label>
+        <input
+          type="checkbox"
+          name=""
+          checked={userPagination.available}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            dispatch(isAvailable(e.target.checked));
+            dispatch(getAvailableUser(e.target.checked));
+          }}
+        />
+        Available
+      </label>
     </div>
   );
 }

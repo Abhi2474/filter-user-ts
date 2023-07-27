@@ -18,4 +18,9 @@ export type ZodPagination = {
 		totalPages: number;
 		totalItems: number;
 	};
+	filterBy: {
+		domain: string
+		gender: string
+		available: boolean | undefined
+	}
 };
