@@ -6,6 +6,7 @@ import FilterUi from "./components/FilterUi";
 
 function App() {
   const [isToggle, setIsToggle] = useState(false);
+
   return (
     <>
       <h1>Hello Typescript</h1>
@@ -17,7 +18,7 @@ function App() {
               className="w-8 h-8 fill-gray-500 cursor-pointer transition-colors "
               onClick={() => setIsToggle(!isToggle)}
             />
-            Template Mode
+            Template View
           </span>
           <FetchData />
         </>
@@ -28,7 +29,7 @@ function App() {
               className="w-8 h-8 fill-blue-500 cursor-pointer transition-colors "
               onClick={() => setIsToggle(!isToggle)}
             />
-            Table Mode
+            Table View
           </span>
 
           <TableData />

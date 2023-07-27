@@ -5,22 +5,23 @@ import {
   getUniqueDomain,
   getUniqueGender,
   isAvailable,
+  resetUser,
   setDomain,
   setGender,
 } from "../redux-store/dataSlice";
-import { RootState } from "../redux-store/store";
+import type { RootState } from "../redux-store/store";
+import { GrPowerReset } from "react-icons/gr";
 
 export default function FilterUi() {
-  const userPagination = useSelector(
-    (state: RootState) => state.users.filterBy
-  );
+  const userFilterBy = useSelector((state: RootState) => state.users.filterBy);
+  const userPagination = useSelector((state: RootState) => state.users.meta);
   const dispatch = useDispatch();
 
   return (
     <div>
       <select
         name="domain changer"
-        value={userPagination.domain}
+        value={userFilterBy.domain}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           dispatch(setDomain(e.target.value));
           dispatch(getUniqueDomain(e.target.value));
@@ -37,7 +38,7 @@ export default function FilterUi() {
       </select>
       <select
         name="gender changer"
-        value={userPagination.gender}
+        value={userFilterBy.gender}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           console.log(e.target.value);
           dispatch(setGender(e.target.value));
@@ -59,7 +60,7 @@ export default function FilterUi() {
         <input
           type="checkbox"
           name=""
-          checked={userPagination.available}
+          checked={userFilterBy.available}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             dispatch(isAvailable(e.target.checked));
             dispatch(getAvailableUser(e.target.checked));
@@ -67,6 +68,14 @@ export default function FilterUi() {
         />
         Available
       </label>
+      <span className="mx-10">
+        Page <b>{userPagination.currentPage}</b>/
+        <b>{userPagination.totalPages}</b> and{" "}
+        <b>{userPagination.totalItems}</b> Total Items
+      </span>
+      <button onClick={() => dispatch(resetUser())}>
+        <GrPowerReset /> reset
+      </button>
     </div>
   );
 }

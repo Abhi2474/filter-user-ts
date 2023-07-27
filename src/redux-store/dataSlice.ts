@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ZodPagination } from '../type';
 import user_data from '../assets/user_data.json'
+import _, { filter } from "lodash";
 
 const initialState: ZodPagination = {
 	filteredArray: user_data,
@@ -27,7 +28,7 @@ export const userSlice = createSlice({
 			let { currentPage } = state.meta
 			state.meta.totalItems = state.filteredArray.length
 			state.data = state.filteredArray.slice(currentPage * state.meta.perPage - state.meta.perPage, currentPage * state.meta.perPage)
-			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
+			state.meta.totalPages = Math.ceil(state.meta.totalItems / state.meta.perPage)
 		},
 
 		resetUser: (state) => {
@@ -53,84 +54,74 @@ export const userSlice = createSlice({
 
 		getUniqueDomain: (state, action: PayloadAction<string>) => {
 			if (state.filterBy.available && state.filterBy.gender) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.available === state.filterBy.available
-				}).filter((data) => {
-					return data.gender === state.filterBy.gender
-				})
+				state.filteredArray = _.filter(user_data, { available: state.filterBy.available })
+				state.filteredArray = _.filter(state.filteredArray, { gender: state.filterBy.gender })
 			}
 			else if (state.filterBy.available) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.available === state.filterBy.available
-				})
+				state.filteredArray = _.filter(user_data, { available: state.filterBy.available })
 			}
 			else if (state.filterBy.gender) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.gender === state.filterBy.gender
-				})
+				state.filteredArray = _.filter(user_data, { gender: state.filterBy.gender })
 			}
-			state.filteredArray = state.filteredArray.filter((data) => {
-				return data.domain === action.payload
-			})
+
+			else if (state.filterBy.available == undefined && !state.filterBy.gender) {
+				state.filteredArray = _.filter(user_data, { domain: action.payload })
+			}
+
+			if (state.filterBy.available || state.filterBy.gender) {
+				state.filteredArray = _.filter(state.filteredArray, { domain: action.payload })
+			}
 			state.meta.currentPage = 1
 			state.meta.totalItems = state.filteredArray.length
-			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
+			state.meta.totalPages = Math.ceil(state.meta.totalItems / state.meta.perPage)
 			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 		},
 
 		getUniqueGender: (state, action: PayloadAction<string>) => {
 			if (state.filterBy.available && state.filterBy.domain) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.available === state.filterBy.available
-				}).filter((data) => {
-					return data.domain === state.filterBy.domain
-				})
+				state.filteredArray = _.filter(user_data, { domain: state.filterBy.domain })
+				state.filteredArray = _.filter(state.filteredArray, { available: state.filterBy.available })
 			}
 			else if (state.filterBy.domain) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.domain === state.filterBy.domain
-				})
+				state.filteredArray = _.filter(user_data, { domain: state.filterBy.domain })
 			}
 			else if (state.filterBy.available) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.available === state.filterBy.available
-				})
+				state.filteredArray = _.filter(user_data, { available: state.filterBy.available })
 			}
-			state.filteredArray = state.filteredArray.filter((data) => {
-				return data.gender === action.payload
-			})
+			else if (state.filterBy.available == undefined && !state.filterBy.domain) {
+				state.filteredArray = _.filter(user_data, { gender: action.payload })
+			}
+			if (state.filterBy.available || state.filterBy.domain) {
+				state.filteredArray = _.filter(state.filteredArray, { gender: action.payload })
+			}
 			state.meta.currentPage = 1
 			state.meta.totalItems = state.filteredArray.length
-			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
+			state.meta.totalPages = Math.ceil(state.meta.totalItems / state.meta.perPage)
 			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 
 		},
 
 		getAvailableUser: (state, action: PayloadAction<boolean>) => {
 			if (state.filterBy.domain && state.filterBy.gender) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.gender === state.filterBy.gender
-				}).filter((data) => {
-					return data.domain === state.filterBy.domain
-				})
+				state.filteredArray = _.filter(user_data, { domain: state.filterBy.domain })
+				state.filteredArray = _.filter(state.filteredArray, { gender: state.filterBy.gender })
 			}
 			else if (state.filterBy.domain) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.domain === state.filterBy.domain
-				})
+				state.filteredArray = _.filter(user_data, { domain: state.filterBy.domain })
 			}
 			else if (state.filterBy.gender) {
-				state.filteredArray = user_data.filter((data) => {
-					return data.gender === state.filterBy.gender
-				})
+				state.filteredArray = _.filter(user_data, { gender: state.filterBy.gender })
 			}
-			state.filteredArray = state.filteredArray.filter((data) => {
-				return data.available === action.payload
-			})
+			else if (!state.filterBy.domain && !state.filterBy.gender) {
+				state.filteredArray = _.filter(user_data, { available: action.payload })
+			}
+			if (state.filterBy.domain || state.filterBy.gender) {
+				state.filteredArray = _.filter(state.filteredArray, { available: action.payload })
+			}
 
 			state.meta.currentPage = 1
 			state.meta.totalItems = state.filteredArray.length
-			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
+			state.meta.totalPages = Math.ceil(state.meta.totalItems / state.meta.perPage)
 			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
 
 		},
@@ -147,30 +138,9 @@ export const userSlice = createSlice({
 			state.filterBy.available = action.payload
 		},
 
-		filterUniqueData: (state) => {
-			if (state.filterBy.available) {
-				state.filteredArray = state.filteredArray.filter((data) => {
-					return data.available
-				})
-			}
-			if (state.filterBy.domain) {
-				state.filteredArray = state.filteredArray.filter((data) => {
-					return data.domain === state.filterBy.domain
-				})
-			}
-			if (state.filterBy.gender) {
-				state.filteredArray = state.filteredArray.filter((data) => {
-					return data.gender === state.filterBy.gender
-				})
-			}
-			state.meta.totalItems = state.filteredArray.length
-			state.meta.totalPages = Math.floor(state.meta.totalItems / state.meta.perPage)
-			state.data = state.filteredArray.slice(state.meta.currentPage * state.meta.perPage - state.meta.perPage, state.meta.currentPage * state.meta.perPage)
-		},
-
 	}
 })
 
-export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser, getUniqueDomain, getUniqueGender, filterUniqueData, isAvailable, setDomain, setGender, getAvailableUser } = userSlice.actions
+export const { increaseCurrentPage, setUser, decreaseCurrentPage, resetUser, getUniqueDomain, getUniqueGender, isAvailable, setDomain, setGender, getAvailableUser } = userSlice.actions
 
 export default userSlice.reducer

@@ -6,7 +6,6 @@ import Button from "../components/Button";
 import {
   decreaseCurrentPage,
   increaseCurrentPage,
-  resetUser,
   setUser,
 } from "../redux-store/dataSlice";
 
@@ -20,7 +19,6 @@ export default function TableData() {
 
   return (
     <>
-      <button onClick={() => dispatch(resetUser())}>reset</button>
       <table className="container table-auto mx-auto text-center border-separate border-spacing-y-2 ">
         <caption className="caption-top my-4">
           Table: Users and their details.
@@ -50,7 +48,7 @@ export default function TableData() {
         </Button>
         <Button
           isDisable={
-            usersPagination?.meta.currentPage > usersPagination.meta.totalPages
+            usersPagination?.meta.currentPage >= usersPagination.meta.totalPages
           }
           onClick={() => dispatch(increaseCurrentPage())}
         >
